@@ -16,4 +16,8 @@
 		public function setUser($user): void {
 			$this->user = &$user;
 		}
+		
+		public function transferAllContent(): void {
+			
+		}
 	}

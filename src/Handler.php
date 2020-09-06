@@ -9,11 +9,11 @@
 
 		protected $db      = null;
 		protected $enviro  = null;
-		protected $db_enabled = false;
+		protected $db_enabled = true;
 
 		public function __construct() {
 			$this->enviro  = new Environment();
-			$this->db_enabled = getenv('db_enabled') == '1';
+			//$this->db_enabled = getenv('db_enabled') == '1';
 			if($this->isDBEnabled()) {
 				$this->db = new DataBase();
 			}

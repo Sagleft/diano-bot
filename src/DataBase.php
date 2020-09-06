@@ -5,7 +5,12 @@
 		private $db_link = null;
 		
 		public function __construct() {
-			$this->db_link = new \mysqli(getenv('db_host'), getenv('db_user'), getenv('db_pass'), getenv('db_name'));
+			$this->db_link = new \mysqli(
+				getenv('db_host'),
+				getenv('db_user'),
+				getenv('db_pass'),
+				getenv('db_name')
+			);
 			$this->db_link->set_charset("utf8");
 		}
 		
