@@ -39,4 +39,23 @@
 				return json_encode($this->client->getSystemInfo());
 			}
 		}
+		
+		public function postMessage($channelid = '', $messageObj = null): bool {
+			if($channelid == '') {
+				$this->last_error = 'channel ID is not set';
+				return false;
+			}
+			if($messageObj == null) {
+				$this->last_error = 'empy message obj given';
+				return false;
+			}
+			$result = $this->client->sendChannelMessage(
+				$channelid, $messageObj->text
+			);
+			if($result == '') {
+				$this->last_error = 'failed to send a message to the channel, received an empty response';
+				return false;
+			}
+			return true;
+		}
 	}

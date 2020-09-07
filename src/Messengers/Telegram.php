@@ -34,7 +34,7 @@
 			for($i = 0; $i < count($result['messages']); $i++) {
 				$msg = new Content\Message();
 				$msg->id = $result['messages'][$i]['id'];
-				$msg->text = $result['messages'][$i]['message'];
+				$msg->text = str_replace('<br />', "\n", $result['messages'][$i]['message']);
 				$messages[] = $msg;
 			}
 			
