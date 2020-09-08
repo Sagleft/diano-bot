@@ -58,4 +58,18 @@
 			}
 			return true;
 		}
+		
+		//override MessengerBase\importMessages
+		public function importMessages($channelid = '', $messages_arr = []): bool {
+			$messages_imported = 0;
+			foreach($messages_arr as $message_obj) {
+				$status_success = $this->postMessage(
+					$channelid, $message_obj->text
+				);
+				if($status_success) {
+					$messages_imported++;
+				}
+			}
+			return ($messages_imported > 0);
+		}
 	}

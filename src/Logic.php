@@ -18,6 +18,6 @@
 		}
 		
 		public function transferAllContent(): void {
-			
+			//
 		}
 	}

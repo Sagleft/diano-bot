@@ -20,4 +20,19 @@
 			return [];
 		}
 		
+		public static function getMessengerByTag($tag = 'telegram') {
+			switch($tag) {
+				default:
+					return new MessengerBase();
+				case 'telegram':
+					return new Telegram();
+				case 'utopia':
+					return new Utopia();
+			}
+		}
+		
+		public function importMessages($channelid = '', $messages_arr = []): bool {
+			//placeholder
+			return true;
+		}
 	}
