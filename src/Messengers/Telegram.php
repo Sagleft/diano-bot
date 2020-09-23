@@ -29,15 +29,16 @@
 				$this->last_error = '0 messages received';
 				return [];
 			}
-			
+
 			$messages = [];
 			for($i = 0; $i < count($result['messages']); $i++) {
 				$msg = new Content\Message();
 				$msg->id = $result['messages'][$i]['id'];
-				$msg->text = str_replace('<br />', "\n", $result['messages'][$i]['message']);
+				$replacement = ""; //\n
+				$msg->text = str_replace('<br />', $replacement, $result['messages'][$i]['message']);
 				$messages[] = $msg;
 			}
-			
+
 			return $messages;
 		}
 		
