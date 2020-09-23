@@ -4,4 +4,8 @@
 	class Message {
 		public $id = 1;
 		public $text = '';
+		
+		public function __construct($newtext = '') {
+			$this->text = $newtext;
+		}
 	}
