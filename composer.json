@@ -2,7 +2,8 @@
 	"require": {
 		"php":">=7.1.0",
 		"vlucas/phpdotenv": "^3.3",
-		"sagleft/utopialib-php": "^1.0"
+		"sagleft/utopialib-php": "^1.0",
+		"electrolinux/phpquery": "^0.9.6"
 	},
 	"autoload": {
 		"psr-4": {
