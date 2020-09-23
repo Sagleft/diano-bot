@@ -32,17 +32,56 @@
 
 			$messages = [];
 			for($i = 0; $i < count($result['messages']); $i++) {
+				$post = $result['messages'][$i];
+				
 				$msg = new Content\Message();
-				$msg->id = $result['messages'][$i]['id'];
+				$msg->id = $post['id'];
 				$replacement = ""; //\n
-				$msg->text = str_replace('<br />', $replacement, $result['messages'][$i]['message']);
+				$msg->text = str_replace('<br />', $replacement, $post['message']);
+				$post_have_media = isset($post['media']);
+				if($post_have_media) {
+					switch($post['media']['_']) {
+						default:
+							//unknown media type
+							break;
+						case 'messageMediaPhoto':
+							//image in post
+							$post_type = 'photo';
+							$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
+							break;
+						case 'messageMediaDocument':
+							//video in post
+							$post_type = 'video';
+							$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
+							break;
+					}
+				}
 				$messages[] = $msg;
 			}
 
 			return $messages;
 		}
 		
-		function getPostImage($channel_ID = '', $postID = 980) {
-			//TODO
+		function getPostImageURL($channel_ID = '', $postID = 980, $post_type = 'photo'): string {
+			$url = 'https://t.me/' . $channel_ID . '/' . $postID . '?embed=1';
+			$html = \App\Utilities::curlGET($url);
+			//echo $url; exit;
+			
+			$dom = \phpQuery::newDocumentHTML($html);
+			
+			$regular_function = '/[\s\S]*background-image:[ ]*url\(["\']*([\s\S]*[^"\'])["\']*\)[\s\S]*/u';
+			switch($post_type) {
+				case 'photo':
+					$element_selector = '.tgme_widget_message_photo_wrap';
+					break;
+				case 'video':
+					$element_selector = '.tgme_widget_message_video_thumb';
+					break;
+			}
+			$element_styles = $dom->find($element_selector)->eq(0)->attr('style');
+			
+			$result = preg_replace($regular_function, '$1', $element_styles);
+			return $result;
 		}
+
 	}

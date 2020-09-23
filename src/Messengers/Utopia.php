@@ -49,9 +49,21 @@
 				$this->last_error = 'empy message obj given';
 				return false;
 			}
+			if($messageObj->image_url != '') {
+				//post have image
+				$image_bytes = file_get_contents($messageObj->image_url);
+				$image_b64   = base64_encode($image_bytes);
+				$image_name  = 'photo.jpg';
+				$this->client->sendChannelPicture(
+					$channelid, $image_b64, $image_name
+				);
+			}
+			$sleep_timeout = 1; //WTF????!
+			sleep($sleep_timeout);
 			$result = $this->client->sendChannelMessage(
 				$channelid, $messageObj->text
 			);
+			
 			if($result == '') {
 				$this->last_error = 'failed to send a message to the channel, received an empty response';
 				return false;
