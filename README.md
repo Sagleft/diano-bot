@@ -34,6 +34,8 @@ php cron/execute_orders.php
 
 To create a new ticket create a .json file in the `cache` folder.
 
+For example, 'export_NationGeographic.json'.
+
 Content example:
 
 ```
