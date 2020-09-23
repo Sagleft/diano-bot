@@ -64,8 +64,12 @@
 			$messages_imported = 0;
 			foreach($messages_arr as $message_obj) {
 				$status_success = $this->postMessage(
-					$channelid, $message_obj->text
+					$channelid, $message_obj
 				);
+				//$status_success = true; //placeholder;
+				//echo 'channelID: ' . $channelid . PHP_EOL;
+				//echo 'message text: ' . PHP_EOL . $message_obj->text . PHP_EOL . PHP_EOL;
+				
 				if($status_success) {
 					$messages_imported++;
 				}
