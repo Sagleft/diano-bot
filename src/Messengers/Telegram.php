@@ -2,6 +2,7 @@
 	namespace App\Messengers;
 
 	class Telegram extends MessengerBase {
+		public $tag  = 'telegram';
 		public $name = 'Telegram';
 		
 		public function getChannelContent($channel_ID = ''): array {
@@ -9,8 +10,6 @@
 				$this->last_error = 'empty channel ID given';
 				return [];
 			}
-			
-			//
 		}
 		
 		public function getChannelPosts($channel_ID = '', $limit = 5): array {
@@ -35,9 +34,12 @@
 				$post = $result['messages'][$i];
 				
 				$msg = new Content\Message();
-				$msg->id = $post['id'];
+				$msg->id = \App\Utilities::checkINT($post['id']);
 				$replacement = ""; //\n
-				$msg->text = str_replace('<br />', $replacement, $post['message']);
+				$msg->text = \App\Utilities::dataFilter(
+					str_replace('<br />', $replacement, $post['message']),
+					$this->db
+				);
 				$post_have_media = isset($post['media']);
 				if($post_have_media) {
 					switch($post['media']['_']) {
@@ -65,8 +67,6 @@
 		function getPostImageURL($channel_ID = '', $postID = 980, $post_type = 'photo'): string {
 			$url = 'https://t.me/' . $channel_ID . '/' . $postID . '?embed=1';
 			$html = \App\Utilities::curlGET($url);
-			//echo $url; exit;
-			
 			$dom = \phpQuery::newDocumentHTML($html);
 			
 			$regular_function = '/[\s\S]*background-image:[ ]*url\(["\']*([\s\S]*[^"\'])["\']*\)[\s\S]*/u';
@@ -80,8 +80,7 @@
 			}
 			$element_styles = $dom->find($element_selector)->eq(0)->attr('style');
 			
-			$result = preg_replace($regular_function, '$1', $element_styles);
-			return $result;
+			return preg_replace($regular_function, '$1', $element_styles);
 		}
 
 	}
