@@ -35,11 +35,16 @@
 				
 				$msg = new Content\Message();
 				$msg->id = \App\Utilities::checkINT($post['id']);
+				
 				$replacement = ""; //\n
-				$msg->text = \App\Utilities::dataFilter(
-					str_replace('<br />', $replacement, $post['message']),
+				$msg_text = \App\Utilities::dataFilter(
+					$post['message'],
 					$this->db
 				);
+				$msg_text = str_replace('\n', "\n", $msg_text);
+				$msg_text = str_replace('<br />', $replacement, $msg_text);
+				$msg->text = $msg_text;
+				
 				$post_have_media = isset($post['media']);
 				if($post_have_media) {
 					switch($post['media']['_']) {
