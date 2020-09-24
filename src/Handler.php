@@ -23,11 +23,6 @@
 			return $this->db_enabled;
 		}
 
-		public function render($data = []) {
-			$this->renderT = new Render($data);
-			$this->renderT->twigRender();
-		}
-
 		public function dataFilter($str = ''): string {
 			if($this->isDBEnabled()) {
 				return Utilities::dataFilter($str, $this->db);
