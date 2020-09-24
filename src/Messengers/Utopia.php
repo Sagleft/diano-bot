@@ -2,6 +2,7 @@
 	namespace App\Messengers;
 
 	class Utopia extends MessengerBase {
+		public $tag  = 'utopia';
 		public $name = 'Utopia';
 		protected $client = null;
 		
@@ -73,19 +74,24 @@
 		
 		//override MessengerBase\importMessages
 		public function importMessages($channelid = '', $messages_arr = []): bool {
-			$messages_imported = 0;
+			$messages_processed = 0;
 			foreach($messages_arr as $message_obj) {
-				$status_success = $this->postMessage(
-					$channelid, $message_obj
-				);
-				//$status_success = true; //placeholder;
-				//echo 'channelID: ' . $channelid . PHP_EOL;
-				//echo 'message text: ' . PHP_EOL . $message_obj->text . PHP_EOL . PHP_EOL;
-				
-				if($status_success) {
-					$messages_imported++;
+
+				if(! $this->checkPostISUsed($message_obj->id, $channelid)) {
+					//post not used
+					$this->markPostUsed($message_obj->id, $channelid);
+
+					$status_success = $this->postMessage(
+						$channelid, $message_obj
+					);
+					if(!$status_success) {
+						//this is not a bug, this is a feature xD
+						$messages_processed--;
+					}
 				}
+				$messages_processed++;
+
 			}
-			return ($messages_imported > 0);
+			return ($messages_processed > 0);
 		}
 	}
