@@ -12,21 +12,11 @@
 		protected $db_enabled = false;
 
 		public function __construct() {
-			$this->enviro  = new Environment();
+			$this->enviro     = new Environment();
 			$this->db_enabled = getenv('db_enabled') == '1';
 			if($this->isDBEnabled()) {
 				$this->db = new DataBase();
 			}
-
-			$this->logic   = new Logic();
-			$this->user    = new User();
-			$this->renderT = new Render([]);
-
-			if($this->isDBEnabled()) {
-				$this->logic->setdb($this->db);
-				$this->user->setdb($this->db);
-			}
-			$this->logic->setUser($this->user);
 		}
 
 		function isDBEnabled(): bool {
@@ -49,4 +39,31 @@
 		public function checkINT($value = 0): int {
 			return Utilities::dataFilter($value, $this->db);
 		}
+		
+		public function executeOrders(): bool {
+			$status_success = false;
+			$ordersHandler = new Cron\AutomatedOrder();
+	
+			$orders = $ordersHandler->getOrders();
+			foreach($orders as $order) {
+				$messenger_source = Messengers\MessengerBase::getMessengerByTag($order->source->tag);
+				$messenger_dest   = Messengers\MessengerBase::getMessengerByTag($order->destination->tag);
+
+				$messenger_source->setDB($this->db);
+				$messenger_dest->setDB($this->db);
+				$messenger_source->connect();
+				$messenger_dest->connect();
+
+				$messages = $messenger_source->getChannelPosts($order->source->channelid, $order->params->limit);
+				$status_success = $messenger_dest->importMessages(
+					$order->destination->channelid,
+					$messages
+				);
+				if(!$status_success) {
+					$this->last_error = $messenger_dest->last_error;
+				}
+			}
+			return $status_success;
+		}
+		
 	}
