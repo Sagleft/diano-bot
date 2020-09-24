@@ -1,4 +1,5 @@
-# diano-bot
+
+![logo](https://github.com/Sagleft/diano-bot/raw/master/logo.png)
 
 This bot allows you to periodically copy content from one messenger to another.
 
