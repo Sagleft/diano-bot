@@ -84,6 +84,7 @@
 					$status_success = $this->postMessage(
 						$channelid, $message_obj
 					);
+					sleep(1);
 					if(!$status_success) {
 						//this is not a bug, this is a feature xD
 						$messages_processed--;
