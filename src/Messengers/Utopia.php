@@ -71,9 +71,50 @@
 			}
 			return true;
 		}
-		
+
+		public function checkModeratorRights($channelid = ''): bool {
+			$moderator_pks = $this->client->getChannelModerators($channelid);
+			if($moderator_pks == []) {
+				return false;
+			}
+			$pk = $this->client->getMyPubkey();
+			return in_array($pk, $moderator_pks);
+		}
+
+		public function checkChannelJoined($channelid = ''): bool {
+			//TODO: Add the ability to work with private channels. In case the client is not connected to the channel, enter it using the password
+
+			$channel_info = $this->client->getChannelInfo($channelid);
+			if($channel_info == []) {
+				$this->client->joinChannel($channelid);
+				return true;
+			}
+
+			$search_filter = $channel_info['title'];
+			$channel_type  = "5"; //joined
+			$query_filter  = \UtopiaLib\Filter("", "", "1");
+
+			$joined_channels = $this->client->getChannels(
+				$search_filter, $channel_type, $query_filter
+			);
+			if($joined_channels == [] || $joined_channels[0] == [] || $channel_data['isjoined'] == false) {
+				$this->client->joinChannel($channelid);
+				return true;
+			}
+			return false;
+		}
+
 		//override MessengerBase\importMessages
 		public function importMessages($channelid = '', $messages_arr = []): bool {
+			if(! $this->checkChannelJoined($channelid)) {
+				$this->last_error = 'Failed to check access to the chat or enter it';
+				return false;
+			}
+			if(! $this->checkModeratorRights($channelid)) {
+				$this->last_error = 'No moderator rights to write posts in the channel';
+				return false;
+			}
+
 			$messages_processed = 0;
 			foreach($messages_arr as $message_obj) {
 
