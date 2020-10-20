@@ -92,7 +92,7 @@
 
 			$search_filter = $channel_info['title'];
 			$channel_type  = "5"; //joined
-			$query_filter  = \UtopiaLib\Filter("", "", "1");
+			$query_filter  = new \UtopiaLib\Filter("", "", "1");
 
 			$joined_channels = $this->client->getChannels(
 				$search_filter, $channel_type, $query_filter
