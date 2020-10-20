@@ -51,15 +51,22 @@
 			return Utilities::cURL($url, '', '', '');
 		}
 
-		public static function generateCode($length = 6): string {
-			// \App\Utilities::generateCode
-			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRQSTUVWXYZ0123456789";
+		public static function generateString($length = 6, $chars = 'ABCDEF'): string {
 			$code = "";
 			$clen = strlen($chars) - 1;
 			while (strlen($code) < $length) {
 				$code .= $chars[mt_rand(0, $clen)];
 			}
 			return $code;
+		}
+
+		public static function generateCode($length = 6): string {
+			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRQSTUVWXYZ0123456789";
+			return Utilities::generateString($length, $chars);
+		}
+
+		public static function generateHEX($length = 8): string {
+			return Utilities::generateString($length, 'ABCDEF0123456789');
 		}
 
 		//return: mixed
