@@ -110,10 +110,10 @@
 				$this->last_error = 'Failed to check access to the chat or enter it';
 				return false;
 			}
-			if(! $this->checkModeratorRights($channelid)) {
-				$this->last_error = 'No moderator rights to write posts in the channel';
-				return false;
-			}
+			//if(! $this->checkModeratorRights($channelid)) {
+			//	$this->last_error = 'No moderator rights to write posts in the channel';
+			//	return false;
+			//}
 
 			$messages_processed = 0;
 			foreach($messages_arr as $message_obj) {
