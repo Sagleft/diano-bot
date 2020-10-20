@@ -88,4 +88,20 @@
 			return preg_replace($regular_function, '$1', $element_styles);
 		}
 
+		public function saveTelegramFile($channelid = '', $postID = ''): string {
+			$file_path = 'https://tg.i-c-a.su/media/' . $channelid . '/' . $postID .'/';
+			$file_headers = get_headers($file_path, true);
+			$file_size = isset($file_headers['Content-Length']) ? (int) $file_headers['Content-Length'] : 0;
+			if($file_size > getenv('max_file_size_mb')*1024*1024) {
+				$this->last_error = 'the remote file is too large';
+				return '';
+			}
+
+			$temp_filename = \App\Utilities::generateHEX(10) . '.ext';
+			$temp_filepath = __DIR__ . '/../../cache/' . $temp_filename;
+			copy($file_path, $temp_filepath);
+			if(file_exists($temp_filepath)) {
+				return $temp_filepath;
+			}
+		}
 	}
