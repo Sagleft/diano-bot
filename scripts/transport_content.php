@@ -6,7 +6,7 @@
 	$messenger_src = new App\Messengers\Telegram();
 	$messenger_src->connect();
 
-	$tg_channel_ID  = 'sagleft_log';
+	$tg_channel_ID  = 'Iifehacker';
 	$utp_channel_ID = '80593384E4B2FE2C426A830F50C190B7';
 	$load_messages_count = 1;
 	$messages = $messenger_src->getChannelPosts($tg_channel_ID, $load_messages_count);
