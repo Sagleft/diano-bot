@@ -57,9 +57,25 @@
 							$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
 							break;
 						case 'messageMediaDocument':
-							//video in post
-							$post_type = 'video';
-							$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
+							if($post['media']['_']['document']['mime_type'] == 'video/mp4') {
+								//video in post
+								$post_type = 'video';
+								$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
+							} else {
+								//another document
+								//$post_type = 'document';
+								$msg->type = 'document';
+								$msg->document_path = $this->getPostMediaUrl($channel_ID, $post['id']);
+								//
+								$attributes = $post['media']['_']['document']['attributes'];
+								$document_name = 'unnamed.ext';
+								foreach($attributes as $attribute) {
+									if(isset($attribute['file_name'])) {
+										$document_name = $attribute['file_name'];
+									}
+								}
+								$msg->document_name = $document_name;
+							}
 							break;
 					}
 				}
@@ -89,7 +105,7 @@
 		}
 
 		public function saveTelegramFile($channelid = '', $postID = ''): string {
-			$file_path = 'https://tg.i-c-a.su/media/' . $channelid . '/' . $postID .'/';
+			$file_path = $this->getPostMediaUrl($channelid, $postID);
 			$file_headers = get_headers($file_path, true);
 			$file_size = isset($file_headers['Content-Length']) ? (int) $file_headers['Content-Length'] : 0;
 			if($file_size > getenv('max_file_size_mb')*1024*1024) {
@@ -103,5 +119,9 @@
 			if(file_exists($temp_filepath)) {
 				return $temp_filepath;
 			}
+		}
+		
+		function getPostMediaUrl($channelid = '', $postID = ''): string {
+			return $file_path = 'https://tg.i-c-a.su/media/' . $channelid . '/' . $postID .'/';
 		}
 	}
