@@ -42,6 +42,7 @@
 		}
 		
 		public function postMessage($channelid = '', $messageObj = null): bool {
+			$sleep_timeout = 1; //WTF????!
 			if($channelid == '') {
 				$this->last_error = 'channel ID is not set';
 				return false;
@@ -50,20 +51,40 @@
 				$this->last_error = 'empy message obj given';
 				return false;
 			}
-			if($messageObj->image_url != '') {
-				//post have image
-				$image_bytes = file_get_contents($messageObj->image_url);
-				$image_b64   = base64_encode($image_bytes);
-				$image_name  = 'photo.jpg';
-				$this->client->sendChannelPicture(
-					$channelid, $image_b64, $image_name
+			if($messageObj->type == 'document') {
+				//document
+				
+				//TODO: will be finalized when there is a method for sending files to the channel
+				
+				/* $document_temppath = $this->saveRemoteFile($messageObj->document_path);
+				$upload_id = $this->client->uploadFile(
+					base64_encode(file_get_contents($document_temppath)),
+					$messageObj->document_name
+				);
+				if($upload_id == 0) {
+					$this->last_error = 'failed to load file ' . $messageObj->document_name . ' into Utopia';
+					return false;
+				}
+				
+				//fix messages rate limit
+				sleep($sleep_timeout); */
+			} else {
+				//text or video
+				if($messageObj->image_url != '') {
+					//post have image
+					$image_bytes = file_get_contents($messageObj->image_url);
+					$image_b64   = base64_encode($image_bytes);
+					$image_name  = 'photo.jpg';
+					$this->client->sendChannelPicture(
+						$channelid, $image_b64, $image_name
+					);
+				}
+
+				sleep($sleep_timeout);
+				$result = $this->client->sendChannelMessage(
+					$channelid, $messageObj->text
 				);
 			}
-			$sleep_timeout = 1; //WTF????!
-			sleep($sleep_timeout);
-			$result = $this->client->sendChannelMessage(
-				$channelid, $messageObj->text
-			);
 			
 			if($result == '') {
 				$this->last_error = 'failed to send a message to the channel, received an empty response';
@@ -102,6 +123,27 @@
 				return true;
 			}
 			return false;
+		}
+
+		function removeCachedFile($filename = ''): void {
+			$file_path = __DIR__ . '/../../cache/' . $filename;
+			unlink($file_path);
+		}
+
+		function saveRemoteFile($file_path = ''): string {
+			$file_headers = get_headers($file_path, true);
+			$file_size = isset($file_headers['Content-Length']) ? (int) $file_headers['Content-Length'] : 0;
+			if($file_size > getenv('max_file_size_mb')*1024*1024) {
+				$this->last_error = 'the remote file is too large';
+				return '';
+			}
+
+			$temp_filename = \App\Utilities::generateHEX(10) . '.ext';
+			$temp_filepath = __DIR__ . '/../../cache/' . $temp_filename;
+			copy($file_path, $temp_filepath);
+			if(file_exists($temp_filepath)) {
+				return $temp_filepath;
+			}
 		}
 
 		//override MessengerBase\importMessages
