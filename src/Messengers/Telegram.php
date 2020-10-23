@@ -33,6 +33,11 @@
 					$post_data['type'] = 'photo';
 					$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
 					break;
+				case 'messageMediaWebPage':
+					//will display as an image
+					$post_data['type'] = 'photo';
+					$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+					break;
 				case 'messageMediaDocument':
 					if(!isset($raw_post_data['media']['document']) || !isset($raw_post_data['media']['document']['mime_type'])) {
 						//??? unknown
@@ -96,7 +101,8 @@
 				);
 				$msg_text = str_replace('\n', "\n", $msg_text);
 				$msg_text = str_replace('<br />', $replacement, $msg_text);
-				$msg->text = $msg_text;
+				$msg->text = html_entity_decode($msg_text);
+
 				$msg->messenger_from_tag = $this->tag;
 				$msg->messenger_from_channel = $channel_ID;
 
