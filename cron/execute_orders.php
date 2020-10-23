@@ -4,5 +4,5 @@
 	$handler = new App\Handler();
 	
 	if(! $handler->executeOrders()) {
-		echo 'failed to import messages. last_error: ' . $handler->last_error;
+		echo 'failed to import messages. last_error: ' . $handler->last_error . PHP_EOL;
 	}
