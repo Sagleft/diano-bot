@@ -46,8 +46,14 @@
 
 				$messenger_source->setDB($this->db);
 				$messenger_dest->setDB($this->db);
-				$messenger_source->connect();
-				$messenger_dest->connect();
+				if(! $messenger_source->connect()) {
+					$this->last_error = 'Failed to connect to ' . $messenger_source->name . ' client';
+					return false;
+				}
+				if(! $messenger_dest->connect()) {
+					$this->last_error = 'Failed to connect to ' . $messenger_dest->name . ' client';
+					return false;
+				}
 
 				$messages = $messenger_source->getChannelPosts($order->source->channelid, $order->params->limit);
 				$status_success = $messenger_dest->importMessages(
