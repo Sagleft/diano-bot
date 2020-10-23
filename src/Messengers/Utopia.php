@@ -118,7 +118,7 @@
 			$joined_channels = $this->client->getChannels(
 				$search_filter, $channel_type, $query_filter
 			);
-			if($joined_channels == [] || $joined_channels[0] == [] || $channel_data['isjoined'] == false) {
+			if($joined_channels == [] || $joined_channels[0] == [] || $joined_channels[0]['isjoined'] == false) {
 				$this->client->joinChannel($channelid);
 				return true;
 			}
