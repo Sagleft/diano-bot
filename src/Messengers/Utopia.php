@@ -42,7 +42,6 @@
 		}
 		
 		public function postMessage($channelid = '', $messageObj = null): bool {
-			$sleep_timeout = 1; //WTF????!
 			if($channelid == '') {
 				$this->last_error = 'channel ID is not set';
 				return false;
@@ -78,9 +77,9 @@
 					$this->client->sendChannelPicture(
 						$channelid, $image_b64, $image_name
 					);
+					sleep($sleep_timeout);
 				}
 
-				sleep($sleep_timeout);
 				$result = $this->client->sendChannelMessage(
 					$channelid, $messageObj->text
 				);
