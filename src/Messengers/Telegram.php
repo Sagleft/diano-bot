@@ -12,6 +12,59 @@
 			}
 		}
 		
+		function parsePostType($raw_post_data = [], $channel_ID = ''): array {
+			$post_data = [
+				'type'          => 'text',
+				'document_path' => '',
+				'document_name' => '',
+				'image_url'     => ''
+			];
+
+			if(!isset($raw_post_data['media'])) {
+				return $post_data;
+			}
+			switch($raw_post_data['media']['_']) {
+				default:
+					//unknown media type
+					$post_data['type'] = 'text';
+					break;
+				case 'messageMediaPhoto':
+					//image in post
+					$post_data['type'] = 'photo';
+					$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+					break;
+				case 'messageMediaDocument':
+					if(!isset($raw_post_data['media']['document']) || !isset($raw_post_data['media']['document']['mime_type'])) {
+						//??? unknown
+						break;
+					}
+
+					switch($raw_post_data['media']['document']['mime_type']) {
+						default:
+							//unknown mime_type
+							$post_data['type'] = 'document';
+							$post_data['document_path'] = $this->getPostMediaUrl($channel_ID, $raw_post_data['id']);
+							//find document name
+							$attributes = $post['media']['_']['document']['attributes'];
+							$document_name = 'unnamed.ext'; //by default
+							foreach($attributes as $attribute) {
+								if(isset($attribute['file_name'])) {
+									$document_name = $attribute['file_name'];
+								}
+							}
+							$post_data['document_name'] = $document_name;
+							break;
+						case 'video/mp4':
+							//video
+							$post_data['type'] = 'video';
+							$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+							break;
+					}
+					break;
+			}
+			return $post_data;
+		}
+		
 		public function getChannelPosts($channel_ID = '', $limit = 5): array {
 			$api_url  = 'https://tg.i-c-a.su/json/' . $channel_ID;
 			$api_url .= '?limit=' . $limit;
@@ -32,10 +85,10 @@
 			$messages = [];
 			for($i = 0; $i < count($result['messages']); $i++) {
 				$post = $result['messages'][$i];
-				
+
 				$msg = new Content\Message();
 				$msg->id = \App\Utilities::checkINT($post['id']);
-				
+
 				$replacement = ""; //\n
 				$msg_text = \App\Utilities::dataFilter(
 					$post['message'],
@@ -47,40 +100,15 @@
 				$msg->messenger_from_tag = $this->tag;
 				$msg->messenger_from_channel = $channel_ID;
 
-				$post_have_media = isset($post['media']);
-				if($post_have_media) {
-					switch($post['media']['_']) {
-						default:
-							//unknown media type
-							break;
-						case 'messageMediaPhoto':
-							//image in post
-							$post_type = 'photo';
-							$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
-							break;
-						case 'messageMediaDocument':
-							if(!isset($post['media']['_']['document']) || $post['media']['_']['document']['mime_type'] == 'video/mp4') {
-								//video in post
-								$post_type = 'video';
-								$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
-							} else {
-								//another document
-								//$post_type = 'document';
-								$msg->type = 'document';
-								$msg->document_path = $this->getPostMediaUrl($channel_ID, $post['id']);
-								//
-								$attributes = $post['media']['_']['document']['attributes'];
-								$document_name = 'unnamed.ext';
-								foreach($attributes as $attribute) {
-									if(isset($attribute['file_name'])) {
-										$document_name = $attribute['file_name'];
-									}
-								}
-								$msg->document_name = $document_name;
-							}
-							break;
-					}
+				$post_data = $this->parsePostType($post, $channel_ID);
+				if($post_data['type'] == 'document') {
+					//Slightly clumsy handling, can be improved
+					$msg->type = 'document';
 				}
+				$msg->document_path = $post_data['document_path'];
+				$msg->document_name = $post_data['document_name'];
+				$msg->image_url     = $post_data['image_url'];
+
 				$messages[] = $msg;
 			}
 
