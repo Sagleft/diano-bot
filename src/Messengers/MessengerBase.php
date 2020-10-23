@@ -38,24 +38,29 @@
 			}
 		}
 		
+		public function postMessage($channelid = '', $messageObj = null): bool {
+			//placeholder
+			return true;
+		}
+		
 		public function importMessages($channelid = '', $messages_arr = []): bool {
 			//placeholder
 			return true;
 		}
 		
-		public function markPostUsed($post_id = '0', $channelid = ''): bool {
+		public function markPostUsed($msg_obj): bool {
 			$sql_query  = "INSERT INTO channels SET ";
-			$sql_query .= "last_post_id='" . $post_id . "',";
-			$sql_query .= "channelid='" . $channelid . "',";
-			$sql_query .= "messenger='" . $this->tag . "'";
+			$sql_query .= "last_post_id='" . $msg_obj->id . "',";
+			$sql_query .= "channelid='" . $msg_obj->messenger_from_channel . "',";
+			$sql_query .= "messenger='" . $msg_obj->messenger_from_tag . "'";
 
 			return $this->db->tryQuery($sql_query);
 		}
 		
-		public function checkPostISUsed($post_id = '0', $channelid = ''): bool {
-			$sql_query  = "SELECT id FROM channels where messenger='" . $this->tag . "'";
-			$sql_query .= " AND channelid='" . $channelid . "'";
-			$sql_query .= " AND last_post_id='" . $post_id . "'";
+		public function checkPostISUsed($msg_obj): bool {
+			$sql_query  = "SELECT id FROM channels where messenger='" . $msg_obj->messenger_from_tag . "'";
+			$sql_query .= " AND channelid='" . $msg_obj->messenger_from_channel . "'";
+			$sql_query .= " AND last_post_id='" . $msg_obj->id . "'";
 			$sql_query .= " LIMIT 1";
 
 			return $this->db->checkRowExists($sql_query);

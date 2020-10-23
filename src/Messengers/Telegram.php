@@ -44,7 +44,9 @@
 				$msg_text = str_replace('\n', "\n", $msg_text);
 				$msg_text = str_replace('<br />', $replacement, $msg_text);
 				$msg->text = $msg_text;
-				
+				$msg->messenger_from_tag = $this->tag;
+				$msg->messenger_from_channel = $channel_ID;
+
 				$post_have_media = isset($post['media']);
 				if($post_have_media) {
 					switch($post['media']['_']) {

@@ -40,7 +40,8 @@
 				return json_encode($this->client->getSystemInfo());
 			}
 		}
-		
+
+		//override MessengerBase\postMessage
 		public function postMessage($channelid = '', $messageObj = null): bool {
 			if($channelid == '') {
 				$this->last_error = 'channel ID is not set';
@@ -162,7 +163,7 @@
 			$messages_processed = 0;
 			foreach($messages_arr as $message_obj) {
 
-				if(! $this->checkPostISUsed($message_obj->id, $channelid)) {
+				if(! $this->checkPostISUsed($message_obj)) {
 					//post not used
 					$status_success = $this->postMessage(
 						$channelid, $message_obj
@@ -172,7 +173,7 @@
 						//this is not a bug, this is a feature xD
 						$messages_processed--;
 					} else {
-						$this->markPostUsed($message_obj->id, $channelid);
+						$this->markPostUsed($message_obj);
 					}
 				}
 				$messages_processed++;
