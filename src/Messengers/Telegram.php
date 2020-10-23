@@ -57,7 +57,7 @@
 							$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
 							break;
 						case 'messageMediaDocument':
-							if($post['media']['_']['document']['mime_type'] == 'video/mp4') {
+							if(!isset($post['media']['_']['document']) || $post['media']['_']['document']['mime_type'] == 'video/mp4') {
 								//video in post
 								$post_type = 'video';
 								$msg->image_url = $this->getPostImageURL($channel_ID, $post['id'], $post_type);
