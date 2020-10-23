@@ -77,7 +77,7 @@
 					$this->client->sendChannelPicture(
 						$channelid, $image_b64, $image_name
 					);
-					sleep($sleep_timeout);
+					sleep(1);
 				}
 
 				$result = $this->client->sendChannelMessage(
