@@ -164,8 +164,6 @@
 
 				if(! $this->checkPostISUsed($message_obj->id, $channelid)) {
 					//post not used
-					$this->markPostUsed($message_obj->id, $channelid);
-
 					$status_success = $this->postMessage(
 						$channelid, $message_obj
 					);
@@ -173,6 +171,8 @@
 					if(!$status_success) {
 						//this is not a bug, this is a feature xD
 						$messages_processed--;
+					} else {
+						$this->markPostUsed($message_obj->id, $channelid);
 					}
 				}
 				$messages_processed++;
