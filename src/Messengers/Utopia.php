@@ -107,8 +107,7 @@
 
 			$channel_info = $this->client->getChannelInfo($channelid);
 			if($channel_info == []) {
-				$this->client->joinChannel($channelid);
-				return true;
+				return false;
 			}
 
 			$search_filter = $channel_info['title'];
@@ -118,11 +117,14 @@
 			$joined_channels = $this->client->getChannels(
 				$search_filter, $channel_type, $query_filter
 			);
-			if($joined_channels == [] || $joined_channels[0] == [] || $joined_channels[0]['isjoined'] == false) {
-				$this->client->joinChannel($channelid);
-				return true;
+			if($joined_channels == [] || $joined_channels[0] == [] || $joined_channels[0]['isjoined'] === false) {
+				return false;
 			}
-			return false;
+			return true;
+		}
+		
+		public function joinChannel($channelid = ''): void {
+			$this->client->joinChannel($channelid);
 		}
 
 		function removeCachedFile($filename = ''): void {
@@ -149,8 +151,9 @@
 		//override MessengerBase\importMessages
 		public function importMessages($channelid = '', $messages_arr = []): bool {
 			if(! $this->checkChannelJoined($channelid)) {
-				$this->last_error = 'Failed to check access to the chat or enter it';
-				return false;
+				//$this->last_error = 'Failed to check access to the chat or enter it';
+				//return false;
+				$this->joinChannel($channelid);
 			}
 			//if(! $this->checkModeratorRights($channelid)) {
 			//	$this->last_error = 'No moderator rights to write posts in the channel';
