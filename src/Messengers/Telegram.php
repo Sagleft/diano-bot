@@ -4,14 +4,14 @@
 	class Telegram extends MessengerBase {
 		public $tag  = 'telegram';
 		public $name = 'Telegram';
-		
+
 		public function getChannelContent($channel_ID = ''): array {
 			if($channel_ID == '') {
 				$this->last_error = 'empty channel ID given';
 				return [];
 			}
 		}
-		
+
 		function parsePostType($raw_post_data = [], $channel_ID = ''): array {
 			$post_data = [
 				'type'          => 'text',
@@ -121,7 +121,7 @@
 			return $messages;
 		}
 		
-		function getPostImageURL($channel_ID = '', $postID = 980, $post_type = 'photo'): string {
+		function getPostImageURLOLD($channel_ID = '', $postID = 980, $post_type = 'photo'): string {
 			$url = 'https://t.me/' . $channel_ID . '/' . $postID . '?embed=1';
 			$html = \App\Utilities::curlGET($url);
 			$dom = \phpQuery::newDocumentHTML($html);
@@ -138,6 +138,10 @@
 			$element_styles = $dom->find($element_selector)->eq(0)->attr('style');
 			
 			return preg_replace($regular_function, '$1', $element_styles);
+		}
+		
+		function getPostImageURL($channel_ID = '', $postID = 980, $post_type = ''): string {
+			return 'https://tg.i-c-a.su/media/' . $channel_ID . '/' . $postID . '/preview';
 		}
 
 		public function saveTelegramFile($channelid = '', $postID = ''): string {
