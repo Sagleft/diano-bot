@@ -78,7 +78,7 @@
 				}
 				$message_text = 'Attached file: ' . $messageObj->document_path;
 				$result = $this->client->sendChannelMessage(
-					$channelid, $messageObj->text
+					$channelid, $message_text
 				);
 			} else {
 				//text or video
