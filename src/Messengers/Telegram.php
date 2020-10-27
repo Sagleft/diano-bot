@@ -15,9 +15,13 @@
 		function parsePostType($raw_post_data = [], $channel_ID = ''): array {
 			$post_data = [
 				'type'          => 'text',
+				'text'          => $raw_post_data['message'],
 				'document_path' => '',
 				'document_name' => '',
-				'image_url'     => ''
+				'image_url'     => '',
+				//'webpage_title' => '',
+				//'webpage_descr' => '',
+				//'have_webpage_preview' => false
 			];
 
 			if(!isset($raw_post_data['media'])) {
@@ -37,6 +41,13 @@
 					//will display as an image
 					$post_data['type'] = 'photo';
 					$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+					if(isset($raw_post_data['media']['webpage'])) {
+						//$post_data['have_webpage_preview'] = true;
+						//$post_data['webpage_title'] = $raw_post_data['media']['webpage']['title'];
+						//$post_data['webpage_descr'] = $raw_post_data['media']['webpage']['description'];
+						$post_data['text'] .= "\n\n" . $raw_post_data['media']['webpage']['title'];
+						$post_data['text'] .= "\n" . $raw_post_data['media']['webpage']['description'];
+					}
 					break;
 				case 'messageMediaDocument':
 					if(!isset($raw_post_data['media']['document']) || !isset($raw_post_data['media']['document']['mime_type'])) {
@@ -94,18 +105,6 @@
 				$msg = new Content\Message();
 				$msg->id = \App\Utilities::checkINT($post['id']);
 
-				$replacement = ""; //\n
-				$msg_text = \App\Utilities::dataFilter(
-					$post['message'],
-					$this->db
-				);
-				$msg_text = str_replace('\n', "\n", $msg_text);
-				$msg_text = str_replace('<br />', $replacement, $msg_text);
-				$msg->text = html_entity_decode($msg_text);
-
-				$msg->messenger_from_tag = $this->tag;
-				$msg->messenger_from_channel = $channel_ID;
-
 				$post_data = $this->parsePostType($post, $channel_ID);
 				if($post_data['type'] == 'document') {
 					//Slightly clumsy handling, can be improved
@@ -114,6 +113,25 @@
 				$msg->document_path = $post_data['document_path'];
 				$msg->document_name = $post_data['document_name'];
 				$msg->image_url     = $post_data['image_url'];
+
+				$replacement = ""; //\n
+				$msg_text = \App\Utilities::dataFilter(
+					$post_data['text'],
+					$this->db
+				);
+				//TODO: filter other vars
+				$msg_text = str_replace('\n', "\n", $msg_text);
+				$msg_text = str_replace('<br />', $replacement, $msg_text);
+				$msg->text = html_entity_decode($msg_text);
+
+				$msg->messenger_from_tag = $this->tag;
+				$msg->messenger_from_channel = $channel_ID;
+
+				//if($post_data['have_webpage_preview'] == true) {
+				//	$msg->have_webpage_preview = true;
+				//	$msg->webpage_title = $post_data['webpage_title'];
+				//	$msg->webpage_descr = $post_data['webpage_descr'];
+				//}
 
 				$messages[] = $msg;
 			}
