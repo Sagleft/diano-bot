@@ -68,6 +68,18 @@
 				
 				//fix messages rate limit
 				sleep($sleep_timeout); */
+				
+				if($messageObj->text != '') {
+					//if the post contains not only a document, but also a text
+					$this->client->sendChannelMessage(
+						$channelid, $messageObj->text
+					);
+					sleep(1);
+				}
+				$message_text = 'Attached file: ' . $messageObj->document_path;
+				$result = $this->client->sendChannelMessage(
+					$channelid, $messageObj->text
+				);
 			} else {
 				//text or video
 				if($messageObj->image_url != '') {
@@ -85,7 +97,6 @@
 					$channelid, $messageObj->text
 				);
 			}
-			
 			if($result == '') {
 				$this->last_error = 'failed to send a message to the channel, received an empty response';
 				return false;
