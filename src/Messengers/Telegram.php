@@ -50,7 +50,7 @@
 							$post_data['type'] = 'document';
 							$post_data['document_path'] = $this->getPostMediaUrl($channel_ID, $raw_post_data['id']);
 							//find document name
-							$attributes = $post['media']['_']['document']['attributes'];
+							$attributes = $raw_post_data['media']['_']['document']['attributes'];
 							$document_name = 'unnamed.ext'; //by default
 							foreach($attributes as $attribute) {
 								if(isset($attribute['file_name'])) {
