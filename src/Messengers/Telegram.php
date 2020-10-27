@@ -93,6 +93,10 @@
 			
 			$result = json_decode($json, true);
 			
+			if(!isset($result['messages'])) {
+				$this->last_error = 'messages not found. possibly banned in an intermediate service';
+				return [];
+			}
 			if(count($result['messages']) == 0) {
 				$this->last_error = '0 messages received';
 				return [];
