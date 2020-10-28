@@ -40,7 +40,12 @@
 				case 'messageMediaWebPage':
 					//will display as an image
 					$post_data['type'] = 'photo';
-					$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+					try {
+						$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+					} catch(\Exception $ex) {
+						$this->last_error = $ex->getMessage();
+					}
+					
 					if(isset($raw_post_data['media']['webpage'])) {
 						//$post_data['have_webpage_preview'] = true;
 						//$post_data['webpage_title'] = $raw_post_data['media']['webpage']['title'];
