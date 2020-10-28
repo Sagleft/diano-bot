@@ -72,8 +72,10 @@
 							break;
 						case 'video/mp4':
 							//video
-							$post_data['type'] = 'video';
-							$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], $post_data['type']);
+							$post_data['type'] = 'document';
+							$post_data['image_url'] = $this->getPostImageURL($channel_ID, $raw_post_data['id'], 'video');
+							$post_data['document_path'] = $this->getPostMediaUrl($channel_ID, $raw_post_data['id']);
+							$post_data['document_name'] = 'video.mp4';
 							break;
 					}
 					break;

@@ -51,9 +51,25 @@
 				$this->last_error = 'empy message obj given';
 				return false;
 			}
+			if($messageObj->image_url != '') {
+				//post have image
+				$image_bytes = file_get_contents($messageObj->image_url);
+				$image_b64   = base64_encode($image_bytes);
+				$image_name  = 'photo.jpg';
+				$result = $this->client->sendChannelPicture(
+					$channelid, $image_b64, $image_name
+				);
+				sleep(1);
+			}
+			if($messageObj->text != '') {
+				//if the post contains not only a document, but also a text
+				$result = $this->client->sendChannelMessage(
+					$channelid, $messageObj->text
+				);
+				sleep(1);
+			}
 			if($messageObj->type == 'document') {
 				//document
-				
 				//TODO: will be finalized when there is a method for sending files to the channel
 				
 				/* $document_temppath = $this->saveRemoteFile($messageObj->document_path);
@@ -69,33 +85,11 @@
 				//fix messages rate limit
 				sleep($sleep_timeout); */
 				
-				if($messageObj->text != '') {
-					//if the post contains not only a document, but also a text
-					$this->client->sendChannelMessage(
-						$channelid, $messageObj->text
-					);
-					sleep(1);
-				}
 				$message_text = 'Attached file: ' . $messageObj->document_path;
 				$result = $this->client->sendChannelMessage(
 					$channelid, $message_text
 				);
-			} else {
-				//text or video
-				if($messageObj->image_url != '') {
-					//post have image
-					$image_bytes = file_get_contents($messageObj->image_url);
-					$image_b64   = base64_encode($image_bytes);
-					$image_name  = 'photo.jpg';
-					$this->client->sendChannelPicture(
-						$channelid, $image_b64, $image_name
-					);
-					sleep(1);
-				}
-
-				$result = $this->client->sendChannelMessage(
-					$channelid, $messageObj->text
-				);
+				sleep(1);
 			}
 			if($result == '') {
 				$this->last_error = 'failed to send a message to the channel, received an empty response';
