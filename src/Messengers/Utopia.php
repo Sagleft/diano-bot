@@ -53,13 +53,18 @@
 			}
 			if($messageObj->image_url != '') {
 				//post have image
-				$image_bytes = file_get_contents($messageObj->image_url);
-				$image_b64   = base64_encode($image_bytes);
-				$image_name  = 'photo.jpg';
-				$result = $this->client->sendChannelPicture(
-					$channelid, $image_b64, $image_name
-				);
-				sleep(1);
+        //TODO: solve this problem by catch data in parser
+        try {
+          $image_bytes = file_get_contents($messageObj->image_url);
+          $image_b64   = base64_encode($image_bytes);
+          $image_name  = 'photo.jpg';
+          $result = $this->client->sendChannelPicture(
+            $channelid, $image_b64, $image_name
+          );
+          sleep(1);
+        } catch(\Exception $ex) {
+          $this->last_error = $ex->getMessage();
+        }
 			}
 			if($messageObj->text != '') {
 				//if the post contains not only a document, but also a text
