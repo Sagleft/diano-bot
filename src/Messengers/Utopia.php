@@ -31,7 +31,11 @@
 		public function isConnected(): bool {
 			return $this->client->checkClientConnection();
 		}
-		
+
+		public function getOwnContact(): array {
+			return $this->client->getOwnContact();
+		}
+
 		public function sayHello(): string {
 			//return (string) var_dump($this->client);
 			if(! $this->isConnected()) {
