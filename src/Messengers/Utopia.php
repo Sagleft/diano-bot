@@ -19,7 +19,7 @@
 					'port'  => getenv('utopia_port')
 				];
 			}
-			
+
 			$this->client = new \UtopiaLib\Client(
 				$connection_data['token'],
 				$connection_data['host'],
@@ -27,7 +27,7 @@
 			);
 			return $this->isConnected();
 		}
-		
+
 		public function isConnected(): bool {
 			return $this->client->checkClientConnection();
 		}
@@ -80,7 +80,7 @@
 			if($messageObj->type == 'document') {
 				//document
 				//TODO: will be finalized when there is a method for sending files to the channel
-				
+
 				/* $document_temppath = $this->saveRemoteFile($messageObj->document_path);
 				$upload_id = $this->client->uploadFile(
 					base64_encode(file_get_contents($document_temppath)),
@@ -90,10 +90,10 @@
 					$this->last_error = 'failed to load file ' . $messageObj->document_name . ' into Utopia';
 					return false;
 				}
-				
+
 				//fix messages rate limit
 				sleep($sleep_timeout); */
-				
+
 				$message_text = 'Attached file: ' . $messageObj->document_path;
 				$result = $this->client->sendChannelMessage(
 					$channelid, $message_text
@@ -136,7 +136,7 @@
 			}
 			return true;
 		}
-		
+
 		public function joinChannel($channelid = ''): void {
 			$this->client->joinChannel($channelid);
 		}
@@ -182,6 +182,7 @@
 					$status_success = $this->postMessage(
 						$channelid, $message_obj
 					);
+					$this->last_error = $this->client->error;
 					sleep(1);
 					if(!$status_success) {
 						//this is not a bug, this is a feature xD

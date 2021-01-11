@@ -5,9 +5,9 @@
 		public $tag  = 'default';
 		public $name = 'Default messenger';
 		public $last_error = '';
-		
+
 		protected $db = null; //DataBase object
-		
+
 		public function __construct($connection_data = []) {
 			$this->connect($connection_data);
 		}
@@ -16,7 +16,7 @@
 			//placeholder
 			return true;
 		}
-		
+
 		public function setDB($dbref = null) {
 			$this->db = &$dbref;
 		}
@@ -26,7 +26,7 @@
 			//placeholder
 			return [];
 		}
-		
+
 		public static function getMessengerByTag($tag = 'telegram') {
 			switch($tag) {
 				default:
@@ -37,17 +37,17 @@
 					return new Utopia();
 			}
 		}
-		
+
 		public function postMessage($channelid = '', $messageObj = null): bool {
 			//placeholder
 			return true;
 		}
-		
+
 		public function importMessages($channelid = '', $messages_arr = []): bool {
 			//placeholder
 			return true;
 		}
-		
+
 		public function markPostUsed($msg_obj): bool {
 			$sql_query  = "INSERT INTO channels SET ";
 			$sql_query .= "last_post_id='" . $msg_obj->id . "',";
@@ -56,7 +56,7 @@
 
 			return $this->db->tryQuery($sql_query);
 		}
-		
+
 		public function checkPostISUsed($msg_obj): bool {
 			$sql_query  = "SELECT id FROM channels where messenger='" . $msg_obj->messenger_from_tag . "'";
 			$sql_query .= " AND channelid='" . $msg_obj->messenger_from_channel . "'";
