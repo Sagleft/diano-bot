@@ -57,51 +57,42 @@
 			}
 			if($messageObj->image_url != '') {
 				//post have image
-        //TODO: solve this problem by catch data in parser
-        try {
-          $image_bytes = file_get_contents($messageObj->image_url);
-          $image_b64   = base64_encode($image_bytes);
-          $image_name  = 'photo.jpg';
-          $result = $this->client->sendChannelPicture(
-            $channelid, $image_b64, $image_name
-          );
-          sleep(1);
-        } catch(\Exception $ex) {
-          $this->last_error = $ex->getMessage();
-        }
+				//TODO: solve this problem by catch data in parser
+				try {
+					$image_bytes = file_get_contents($messageObj->image_url);
+					$image_b64   = base64_encode($image_bytes);
+					$image_name  = 'photo.jpg';
+					$result = $this->client->sendChannelPicture(
+						$channelid, $image_b64, $image_name
+					);
+					if($result == '') {
+						$this->last_error = 'failed to post picture to ' . $channelid . ' channel';
+					}
+					sleep(1);
+				} catch(\Exception $ex) {
+					$this->last_error = $ex->getMessage();
+				}
 			}
 			if($messageObj->text != '') {
 				//if the post contains not only a document, but also a text
 				$result = $this->client->sendChannelMessage(
 					$channelid, $messageObj->text
 				);
+				$this->last_error = 'failed to send a message to the channel, received an empty response';
 				sleep(1);
 			}
 			if($messageObj->type == 'document') {
 				//document
 				//TODO: will be finalized when there is a method for sending files to the channel
 
-				/* $document_temppath = $this->saveRemoteFile($messageObj->document_path);
-				$upload_id = $this->client->uploadFile(
-					base64_encode(file_get_contents($document_temppath)),
-					$messageObj->document_name
-				);
-				if($upload_id == 0) {
-					$this->last_error = 'failed to load file ' . $messageObj->document_name . ' into Utopia';
-					return false;
-				}
-
-				//fix messages rate limit
-				sleep($sleep_timeout); */
-
 				$message_text = 'Attached file: ' . $messageObj->document_path;
 				$result = $this->client->sendChannelMessage(
 					$channelid, $message_text
 				);
+				$this->last_error = 'failed to send an attachment to ' . $channelid . ' channel';
 				sleep(1);
 			}
 			if($result == '') {
-				$this->last_error = 'failed to send a message to the channel, received an empty response';
 				return false;
 			}
 			return true;
