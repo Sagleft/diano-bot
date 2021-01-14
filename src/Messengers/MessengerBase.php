@@ -7,9 +7,11 @@
 		public $last_error = '';
 
 		protected $db = null; //DataBase object
+		protected $is_debug = false;
 
 		public function __construct($connection_data = []) {
 			$this->connect($connection_data);
+			$this->is_debug = getenv('is_debug') == '1';
 		}
 
 		public function connect($connection_data = []): bool {

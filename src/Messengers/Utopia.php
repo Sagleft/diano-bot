@@ -56,6 +56,9 @@
 				return false;
 			}
 			if($messageObj->image_url != '') {
+				if($this->is_debug) {
+					echo "use image url: " . $messageObj->image_url . PHP_EOL;
+				}
 				//post have image
 				//TODO: solve this problem by catch data in parser
 				try {
@@ -72,24 +75,39 @@
 				} catch(\Exception $ex) {
 					$this->last_error = $ex->getMessage();
 				}
+			} else {
+				if($this->is_debug) {
+					echo "message without image." . PHP_EOL;
+				}
 			}
 			if($messageObj->text != '') {
 				//if the post contains not only a document, but also a text
 				$result = $this->client->sendChannelMessage(
 					$channelid, $messageObj->text
 				);
-				$this->last_error = 'failed to send a message to the channel, received an empty response';
+				if($result == '') {
+					$this->last_error = 'failed to send a message to the channel, received an empty response';
+				}
 				sleep(1);
+			} else {
+				if($this->is_debug) {
+					echo "message text is not set." . PHP_EOL;
+				}
 			}
 			if($messageObj->type == 'document') {
 				//document
 				//TODO: will be finalized when there is a method for sending files to the channel
 
 				$message_text = 'Attached file: ' . $messageObj->document_path;
+				if($this->is_debug) {
+					echo $message_text . PHP_EOL;
+				}
 				$result = $this->client->sendChannelMessage(
 					$channelid, $message_text
 				);
-				$this->last_error = 'failed to send an attachment to ' . $channelid . ' channel';
+				if($result == '') {
+					$this->last_error = 'failed to send an attachment to ' . $channelid . ' channel';
+				}
 				sleep(1);
 			}
 			if($result == '') {
