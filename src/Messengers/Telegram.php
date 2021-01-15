@@ -45,13 +45,17 @@
 					} catch(\Exception $ex) {
 						$this->last_error = $ex->getMessage();
 					}
-					
+
 					if(isset($raw_post_data['media']['webpage'])) {
 						//$post_data['have_webpage_preview'] = true;
 						//$post_data['webpage_title'] = $raw_post_data['media']['webpage']['title'];
 						//$post_data['webpage_descr'] = $raw_post_data['media']['webpage']['description'];
-						$post_data['text'] .= "\n\n" . $raw_post_data['media']['webpage']['title'];
-						$post_data['text'] .= "\n" . $raw_post_data['media']['webpage']['description'];
+						if(isset($raw_post_data['media']['webpage']['title'])) {
+							$post_data['text'] .= "\n\n" . $raw_post_data['media']['webpage']['title'];
+						}
+						if(isset($raw_post_data['media']['webpage']['description'])) {
+							$post_data['text'] .= "\n" . $raw_post_data['media']['webpage']['description'];
+						}
 					}
 					break;
 				case 'messageMediaDocument':
