@@ -112,4 +112,22 @@
 			}
 			return $data;
 		}
+
+		public static function remoteFileExists($url = 'https://example.com/image.jpg') {
+			$curl = curl_init($url);
+			curl_setopt($curl, CURLOPT_NOBODY, true);
+			//send request
+			$result = curl_exec($curl);
+			$exists = false;
+			//if request did not fail
+			if ($result !== false) {
+				//check response code
+				$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+				if ($statusCode == 200) {
+					$exists = true;
+				}
+			}
+			curl_close($curl);
+			return $exists;
+		}
 	}
