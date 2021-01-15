@@ -62,16 +62,22 @@
 				//post have image
 				//TODO: solve this problem by catch data in parser
 				try {
-					$image_bytes = file_get_contents($messageObj->image_url);
-					$image_b64   = base64_encode($image_bytes);
-					$image_name  = 'photo.jpg';
-					$result = $this->client->sendChannelPicture(
-						$channelid, $image_b64, $image_name
-					);
-					if($result == '') {
-						$this->last_error = 'failed to post picture to ' . $channelid . ' channel';
+					if(\App\Utilities::remoteFileExists($messageObj->image_url)) {
+						$image_bytes = file_get_contents($messageObj->image_url);
+						$image_b64   = base64_encode($image_bytes);
+						$image_name  = 'photo.jpg';
+						$result = $this->client->sendChannelPicture(
+							$channelid, $image_b64, $image_name
+						);
+						if($result == '') {
+							$this->last_error = 'failed to post picture to ' . $channelid . ' channel';
+						}
+						sleep(1);
+					} else {
+						if($this->is_debug) {
+							print "remote image " . $messageObj->image_url . " doesn't exists. skip" . PHP_EOL;
+						}
 					}
-					sleep(1);
 				} catch(\Exception $ex) {
 					$this->last_error = $ex->getMessage();
 				}
