@@ -91,7 +91,20 @@
 			}
 			return $post_data;
 		}
-		
+
+		public function isPostContainsAds($post_text = ''): bool {
+			$hashtags = [
+				'реклама', 'партнерскийпост'
+			];
+			for($i = 0; $i < count($hashtags); $i++) {
+				$adHashTagPos = strripos($post_text, '#' . $hashtags[$i]);
+				if($adHashTagPos !== false) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public function getChannelPosts($channel_ID = '', $limit = 5): array {
 			$api_url  = 'https://tg.i-c-a.su/json/' . $channel_ID;
 			$api_url .= '?limit=' . $limit;
@@ -139,16 +152,13 @@
 				$msg_text = str_replace('<br />', $replacement, $msg_text);
 				$msg->text = html_entity_decode($msg_text);
 
-				$msg->messenger_from_tag = $this->tag;
-				$msg->messenger_from_channel = $channel_ID;
-
-				//if($post_data['have_webpage_preview'] == true) {
-				//	$msg->have_webpage_preview = true;
-				//	$msg->webpage_title = $post_data['webpage_title'];
-				//	$msg->webpage_descr = $post_data['webpage_descr'];
-				//}
-
-				$messages[] = $msg;
+				//filter ads
+				if(! $this->isPostContainsAds($msg->text)) {
+					$msg->messenger_from_tag = $this->tag;
+					$msg->messenger_from_channel = $channel_ID;
+	
+					$messages[] = $msg;
+				}
 			}
 
 			return $messages;
