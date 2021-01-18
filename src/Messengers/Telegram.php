@@ -114,7 +114,7 @@
 			}
 
 			$messages = [];
-			for($i = 0; $i < count($result['messages']); $i++) {
+			for($i = count($result['messages'])-1; $i >= 0; $i--) {
 				$post = $result['messages'][$i];
 
 				$msg = new Content\Message();
