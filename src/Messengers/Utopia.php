@@ -190,8 +190,9 @@
 			//}
 
 			$messages_processed = 0;
-			foreach($messages_arr as $message_obj) {
+			for($i = 0; $i < count($messages_arr); $i++) {
 
+				$message_obj = $messages_arr[$i];
 				if(! $this->checkPostISUsed($message_obj)) {
 					//post not used
 					$status_success = $this->postMessage(
