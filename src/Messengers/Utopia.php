@@ -210,6 +210,6 @@
 				$messages_processed++;
 
 			}
-			return ($messages_processed > 0);
+			return ($messages_processed >= 0);
 		}
 	}
