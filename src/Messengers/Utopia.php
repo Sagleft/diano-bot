@@ -116,7 +116,7 @@
 				}
 				sleep(1);
 			}
-			if($result == '') {
+			if(isset($result) && $result == '') {
 				return false;
 			}
 			return true;
