@@ -63,6 +63,12 @@ where
 * `params` section: other parameters;
 * `limit`: number of posts for transportation;
 
+## Channel Limit Problem
+
+In Utopia, you can create a maximum of 10 channels. There is a way to solve this problem. You will need to create additional accounts on which you will create channels. Next, you add the bot account to these channels and give it moderator rights.
+
+## other
+
 This content transport request will be made the next time the script `cron/execute_orders.php` is called.
 
 You will also need to enter data for authorization in the file `.env`
