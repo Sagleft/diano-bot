@@ -16,6 +16,16 @@ Supported Clients:
 
 ## Installation
 
+Using Centos 7 as an example. First, let's install everything you need:
+
+```bash
+sudo yum install -y unzip nano git composer
+```
+
+Next, you need to install PHP version 7.1 or higher, as well as MariaDB, [you can use this instruction](https://github.com/Sagleft/install-lamp/blob/master/centos7_lamp.sh).
+
+Next, we clone the repository and install the necessary packages:
+
 ```bash
 cd ~
 git clone https://github.com/Sagleft/diano-bot
@@ -24,6 +34,37 @@ mkdir cache
 cp example.env .env
 composer update
 ```
+
+
+
+Next, we will deal with the database. First, you need to create a user to grant privileges to:
+
+```bash
+mysql -u root
+```
+
+then in mysql:
+
+```
+CREATE USER 'dianouser'@'localhost' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON * . * TO 'dianouser'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Create a database:
+
+```
+CREATE DATABASE `diano` CHARACTER SET utf8 COLLATE utf8_general_ci;
+```
+
+and import tables dump:
+
+```
+cd ~/diano-bot
+mysql -u dianouser -b diano<diano.sql
+```
+
+Next, you need to create tasks for importing channels. An example of such files is shown below. The files should be located in the cache directory.
 
 ## Usage
 
