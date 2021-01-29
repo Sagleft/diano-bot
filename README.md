@@ -64,7 +64,7 @@ cd ~/diano-bot
 mysql -u dianouser -b diano<diano.sql
 ```
 
-Next, you need to create tasks for importing channels. An example of such files is shown below. The files should be located in the cache directory.
+Next, you need to create tasks for importing channels. An example of such files is shown below. The files should be located in the `cache` directory.
 
 ## Usage
 
