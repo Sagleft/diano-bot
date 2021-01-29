@@ -94,7 +94,7 @@
 
 		public function isPostContainsAds($post_text = ''): bool {
 			$hashtags = [
-				'реклама', 'партнерскийпост'
+				'реклама', 'партнерскийпост', 'promo', 'ads', 'adverstment',
 			];
 			for($i = 0; $i < count($hashtags); $i++) {
 				$adHashTagPos = strripos($post_text, '#' . $hashtags[$i]);
@@ -163,7 +163,7 @@
 
 			return $messages;
 		}
-		
+
 		function getPostImageURLOLD($channel_ID = '', $postID = 980, $post_type = 'photo'): string {
 			$url = 'https://t.me/' . $channel_ID . '/' . $postID . '?embed=1';
 			$html = \App\Utilities::curlGET($url);
