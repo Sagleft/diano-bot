@@ -13,6 +13,7 @@ Supported Clients:
 * PHP 7.1+
 * php-composer
 * cron
+* mariadb 5.5+
 
 ## Installation
 
