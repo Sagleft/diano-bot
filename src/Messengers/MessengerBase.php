@@ -67,4 +67,25 @@
 
 			return $this->db->checkRowExists($sql_query);
 		}
+
+		public function isPostContainsAds($post_text = ''): bool {
+			$adFiltersFilePath = __DIR__ . "/../../ad-filters/" . $this->tag . ".json";
+			if(!file_exists($adFiltersFilePath)) {
+				//filters file not found
+				return false;
+			}
+			$json = file_get_contents($adFiltersFilePath);
+			if(! \App\Utilities::isJson($json)) {
+				//failed to parse ad filters json
+				return false;
+			}
+			$hashtags = json_decode($json, true);
+			for($i = 0; $i < count($hashtags); $i++) {
+				$adHashTagPos = strripos($post_text, $hashtags[$i]);
+				if($adHashTagPos !== false) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}

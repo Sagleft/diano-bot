@@ -92,19 +92,6 @@
 			return $post_data;
 		}
 
-		public function isPostContainsAds($post_text = ''): bool {
-			$hashtags = [
-				'реклама', 'партнерскийпост', 'promo', 'ads', 'adverstment',
-			];
-			for($i = 0; $i < count($hashtags); $i++) {
-				$adHashTagPos = strripos($post_text, '#' . $hashtags[$i]);
-				if($adHashTagPos !== false) {
-					return true;
-				}
-			}
-			return false;
-		}
-
 		public function getChannelPosts($channel_ID = '', $limit = 5): array {
 			$api_url  = 'https://tg.i-c-a.su/json/' . $channel_ID;
 			$api_url .= '?limit=' . $limit;
