@@ -17,6 +17,8 @@ Supported Clients:
 
 ## Installation
 
+Extended instruction [available here](https://gist.github.com/Sagleft/1ec700b47e6e8b59d1599385d7139829) (while in Russian, later there will be a translation in English).
+
 Using Centos 7 as an example. First, let's install everything you need:
 
 ```bash
