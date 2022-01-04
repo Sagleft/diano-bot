@@ -116,3 +116,10 @@ In Utopia, you can create a maximum of 10 channels. There is a way to solve this
 This content transport request will be made the next time the script `cron/execute_orders.php` is called.
 
 You will also need to enter data for authorization in the file `.env`
+
+
+---
+
+![image](https://github.com/Sagleft/Sagleft/raw/master/image.png)
+
+### :globe_with_meridians: [Telegram канал](https://t.me/+VIvd8j6xvm9iMzhi)
