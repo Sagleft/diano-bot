@@ -63,7 +63,7 @@
 				//TODO: solve this problem by catch data in parser
 				try {
 					if(\App\Utilities::remoteFileExists($messageObj->image_url)) {
-						$image_bytes = \App\Utilities::fileGetContentsCurl($messageObj->image_url);
+						$image_bytes = file_get_contents($messageObj->image_url);
 						$image_b64   = base64_encode($image_bytes);
 						$image_name  = 'photo.jpg';
 						$result = $this->client->sendChannelPicture(

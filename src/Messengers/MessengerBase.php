@@ -74,7 +74,7 @@
 				//filters file not found
 				return false;
 			}
-			$json = \App\Utilities::fileGetContentsCurl($adFiltersFilePath);
+			$json = file_get_contents($adFiltersFilePath);
 			if(! \App\Utilities::isJson($json)) {
 				//failed to parse ad filters json
 				return false;
