@@ -107,9 +107,31 @@ where
 * `params` section: other parameters;
 * `limit`: number of posts for transportation;
 
-## Channel Limit Problem
+## Solve problems
+
+### Channel Limit Problem
 
 In Utopia, you can create a maximum of 10 channels. There is a way to solve this problem. You will need to create additional accounts on which you will create channels. Next, you add the bot account to these channels and give it moderator rights.
+
+### SSL problem
+
+Get the correct directory for your certs to be placed by default with this
+
+```bash
+php -r "print_r(openssl_get_cert_locations()['default_cert_file']);"
+```
+
+Then use this to get the cert and put it in the default location found from the code above
+
+```bash
+wget http://curl.haxx.se/ca/cacert.pem -O <default location>
+```
+
+example:
+
+```bash
+wget http://curl.haxx.se/ca/cacert.pem -O /etc/pki/tls/cert.pem --no-check-certificate
+```
 
 ## other
 
