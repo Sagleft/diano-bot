@@ -14,7 +14,7 @@
 				if(! is_dir($item_path)) {
 					if(strpos($item, '.' . $find_ext) > 0) {
 						//$order_files[] = $item;
-						$json = file_get_contents($item_path);
+						$json = \App\Utilities::fileGetContentsCurl($item_path);
 						if(\App\Utilities::isJson($json)) {
 							$orders[] = json_decode($json);
 						}
