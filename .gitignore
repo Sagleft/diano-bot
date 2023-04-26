@@ -2,6 +2,7 @@ composer.lock
 /bot/vendor/**
 /logs/**
 /bot/cache/**
+/redirects/**
 .env
 .htaccess
 *.bak
