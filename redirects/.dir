@@ -1,0 +1,26 @@
+place your redirect scripts in this folder.
+
+example file `export_NationGeographic.json`:
+
+{
+	"source": {
+		"tag": "telegram",
+		"channelid": "NationGeographic"
+	},
+	"destination": {
+		"tag": "utopia",
+		"channelid": "02FAD8A273A72241F2D5B725742B53B0"
+	},
+	"params": {
+		"limit": 1
+	}
+}
+
+where
+
+    tag: technical parameter, messenger name;
+    channelid: channel or group ID in the messenger;
+    source section: where do we get the posts;
+    destination section: where we will post posts;
+    params section: other parameters;
+    limit: number of posts for transportation;
