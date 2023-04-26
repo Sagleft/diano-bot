@@ -6,18 +6,28 @@ import (
 	"unicode"
 
 	swissknife "github.com/Sagleft/swiss-knife"
+	"github.com/fatih/color"
 	"gopkg.in/robfig/cron.v2"
 )
 
 const (
 	appName     = "diano-bot"
-	devAddress  = ""
+	devAddress  = "F50AF5410B1F3F4297043F0E046F205BCBAA76BEC70E936EB0F3AB94BF316804"
 	currencyTag = "CRP"
 )
 
 func main() {
 	swissknife.PrintIntroMessage(appName, devAddress, currencyTag)
-	setupCron(os.Getenv("CRON_SPEC"))
+
+	cronSpec := os.Getenv("CRON_SPEC")
+	if cronSpec == "" {
+		color.Red("cron rules not set. exit")
+		return
+	}
+
+	setupCron(cronSpec)
+
+	swissknife.RunInBackground()
 }
 
 func parseCronSpec(spec string) string {

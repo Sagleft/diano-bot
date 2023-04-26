@@ -15,6 +15,7 @@ RUN bash install.sh
 
 # build helper script
 FROM golang:1.18.3-buster as builder
+COPY ./helper /app/helper
 WORKDIR /app/helper
 RUN go build -o /app/bot
 
