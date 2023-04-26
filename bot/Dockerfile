@@ -12,3 +12,14 @@ RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # install dependencies
 RUN composer update
 RUN bash install.sh
+
+# build helper script
+FROM golang:1.18.3-buster as builder
+WORKDIR /app/helper
+RUN go build -o /app/bot
+
+#FROM gcr.io/distroless/base
+#WORKDIR /app
+#COPY --from=builder /app /app
+WORKDIR /app
+CMD ["./bot"]

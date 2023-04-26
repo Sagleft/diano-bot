@@ -15,6 +15,7 @@ services:
       db_enabled: 1
       max_file_size_mb: 10
       is_debug: 0
+      CRON_SPEC: every 1m
     depends_on:
       - utopia-api
     networks:
