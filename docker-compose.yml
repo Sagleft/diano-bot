@@ -1,0 +1,38 @@
+version: "2.2"
+
+services:
+  bot:
+    build: src/
+    environment:
+      bot_nickname: UnboundMedia
+      utopia_host: utopia-api
+      utopia_token: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      utopia_port: 22825
+      db_host: localhost
+      db_user: root
+      db_pass:
+      db_name: diano
+      db_enabled: 1
+    depends_on:
+      - utopia-api
+    networks:
+      - unetwork
+    volumes:
+      - './redirects:/app/cache'
+
+  utopia-api:
+    image: uto9234/utopia-api
+    ports:
+      - 22825:22825
+    environment:
+      XDG_RUNTIME_DIR: /tmp/runtime-root
+    networks:
+      - unetwork
+    logging:
+      driver: none
+
+networks:
+  unetwork:
+
+volumes:
+  redirects:
