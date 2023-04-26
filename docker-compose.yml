@@ -1,8 +1,8 @@
 version: "2.2"
 
 services:
-  bot:
-    build: src/
+  core:
+    build: bot/
     environment:
       bot_nickname: UnboundMedia
       utopia_host: utopia-api
@@ -13,6 +13,8 @@ services:
       db_pass:
       db_name: diano
       db_enabled: 1
+      max_file_size_mb: 10
+      is_debug: 0
     depends_on:
       - utopia-api
     networks:
