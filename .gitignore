@@ -1,7 +1,7 @@
-/composer.lock
-/vendor/**
+composer.lock
+/bot/vendor/**
 /logs/**
-/cache/**
+/bot/cache/**
 .env
 .htaccess
 *.bak
