@@ -23,6 +23,8 @@ services:
       - unetwork
     volumes:
       - './redirects:/app/cache'
+    stdin_open: true
+    tty: true
 
   utopia-api:
     image: uto9234/utopia-api
@@ -50,7 +52,7 @@ services:
       - 3318:3306
     volumes:
       - ./db:/var/lib/mysql
-      - ./db_dump.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./bot/db_dump.sql:/docker-entrypoint-initdb.d/init.sql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       - unetwork
