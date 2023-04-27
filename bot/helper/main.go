@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"unicode"
 
 	swissknife "github.com/Sagleft/swiss-knife"
@@ -41,11 +42,17 @@ func parseCronSpec(spec string) string {
 func setupCron(cronSpec string) {
 	c := cron.New()
 	c.AddFunc(parseCronSpec(cronSpec), func() {
-		runBot()
+		if err := runBot(); err != nil {
+			color.Red("process tasks: %s", err.Error())
+		}
 	})
 	c.Start()
 }
 
-func runBot() {
-	fmt.Println("run bot..") // TEMP
+func runBot() error {
+	r := exec.Command("php", "cron/execute_orders.php")
+	if err := r.Run(); err != nil {
+		return fmt.Errorf("run process: %w", err)
+	}
+	return nil
 }
