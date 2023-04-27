@@ -14,7 +14,7 @@ services:
       db_name: diano
       db_enabled: 1
       max_file_size_mb: 10
-      is_debug: 0
+      is_debug: 1
       CRON_SPEC: every 10s
     depends_on:
       - utopia-api
