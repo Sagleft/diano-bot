@@ -6,3 +6,4 @@ composer.lock
 .env
 .htaccess
 *.bak
+db/**
