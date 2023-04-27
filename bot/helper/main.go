@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"unicode"
@@ -50,9 +51,15 @@ func setupCron(cronSpec string) {
 }
 
 func runBot() error {
-	r := exec.Command("php", "cron/execute_orders.php")
-	if err := r.Run(); err != nil {
-		return fmt.Errorf("run process: %w", err)
+	r := exec.Command("php", "/app/cron/execute_orders.php")
+
+	stdout, err := r.Output()
+	if err != nil {
+		return fmt.Errorf("get output: %w", err)
+	}
+
+	if len(stdout) > 0 {
+		log.Println(string(stdout))
 	}
 	return nil
 }
