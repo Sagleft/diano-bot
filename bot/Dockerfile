@@ -1,5 +1,13 @@
+# build helper script
+FROM golang:1.18.3-buster as builder
+WORKDIR /app
+RUN mkdir /app/helper
+COPY helper /app/
+RUN go build -o /app/bot
+
 FROM rsubr/php-ubuntu:focal
 WORKDIR /app
+COPY --from=builder /app/bot /app/bot
 RUN mkdir /app/cache
 COPY . .
 
@@ -12,16 +20,5 @@ RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # install dependencies
 RUN composer update
 RUN bash install.sh
-
-# build helper script
-RUN wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
-RUN export GOROOT=/usr/local/go \
-    export GOPATH=$GOROOT/bin \
-    export PATH=$PATH:$GOPATH/bin \
-    export PATH=$PATH:$GOPATH
-RUN cd /app/helper
-RUN go build -o /app/bot
-RUN cd /app
 
 CMD ["./bot"]
