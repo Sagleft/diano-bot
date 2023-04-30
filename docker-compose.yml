@@ -15,7 +15,8 @@ services:
       db_enabled: 1
       max_file_size_mb: 10
       is_debug: 1
-      CRON_SPEC: every 10s
+      CRON_SPEC: every 1m
+      DISABLE_ENV_PARSE: 1
     depends_on:
       - utopia-api
       - db
@@ -34,8 +35,12 @@ services:
       XDG_RUNTIME_DIR: /tmp/runtime-root
     networks:
       - unetwork
-    logging:
-      driver: none
+    volumes:
+      - type: bind
+        source: ./account.db
+        target: /app/account.db
+    #logging:
+    #  driver: none
 
   db:
     command: mkdir db
