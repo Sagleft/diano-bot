@@ -51,6 +51,10 @@
 		}
 
 		public function markPostUsed($msg_obj): bool {
+			if($this->is_debug) {
+				echo "mark post " . $msg_obj->id . " as used\n";
+			}
+
 			$sql_query  = "INSERT INTO channels SET ";
 			$sql_query .= "last_post_id='" . $msg_obj->id . "',";
 			$sql_query .= "channelid='" . $msg_obj->messenger_from_channel . "',";
@@ -65,7 +69,12 @@
 			$sql_query .= " AND last_post_id='" . $msg_obj->id . "'";
 			$sql_query .= " LIMIT 1";
 
-			return $this->db->checkRowExists($sql_query);
+			$isUsed = $this->db->checkRowExists($sql_query);
+			if($this->is_debug) {
+				echo "post " . $msg_obj->id . " already been used\n";
+			}
+
+			return $isUsed;
 		}
 
 		public function isPostContainsAds($post_text = ''): bool {
@@ -83,6 +92,10 @@
 			for($i = 0; $i < count($hashtags); $i++) {
 				$adHashTagPos = strripos($post_text, $hashtags[$i]);
 				if($adHashTagPos !== false) {
+					if($this->is_debug) {
+						echo "post contains advertising. skip it\n";
+					}
+
 					return true;
 				}
 			}
