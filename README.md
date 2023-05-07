@@ -40,19 +40,7 @@ Examples:
 
 * [How To Install and Use Docker Compose on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 
-then run the command in the terminal to run bot:
-
-```bash
-docker-compose up
-```
-
-or run in background:
-
-```bash
-docker-compose up -d
-```
-
-## create content redirects
+6. Create content redirects
 
 To create a new redirect contents task create a .json file in the `redirects` folder.
 
@@ -74,6 +62,24 @@ Content example:
 		"limit": 1
 	}
 }
+```
+
+7. then run the command in the terminal to run bot:
+
+```bash
+docker-compose up
+```
+
+or run in background:
+
+```bash
+docker-compose up -d
+```
+
+## How to find bot logs
+
+```bash
+docker container logs diano-bot_core_1
 ```
 
 where
