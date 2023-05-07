@@ -26,6 +26,9 @@ func main() {
 		color.Red("cron rules not set. exit")
 		return
 	}
+	if cronSpec == "every 1m" {
+		cronSpec = "every 2m"
+	}
 
 	setupCron(cronSpec)
 
