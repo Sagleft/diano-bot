@@ -5,14 +5,14 @@ services:
     build: bot/
     restart: always
     environment:
-      bot_nickname: UnboundMedia
-      utopia_host: diano-bot_utopia-api_1
-      utopia_token: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-      utopia_port: 22825
-      db_host: db
-      db_user: root
-      db_pass: pass
-      db_name: diano
+      bot_nickname: "UnboundMedia"
+      utopia_host: "diano-utopia-api"
+      utopia_token: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+      utopia_port: "22825"
+      db_host: "mysql-db"
+      db_user: "root"
+      db_pass: "pass"
+      db_name: "diano"
       db_enabled: 1
       max_file_size_mb: 10
       is_debug: 1
@@ -30,7 +30,8 @@ services:
 
   utopia-api:
     image: uto9234/utopia-api
-    hostname: utopia-api
+    hostname: diano-utopia-api
+    container_name: diano-utopia-api
     restart: always
     ports:
       - 22825:22825
@@ -43,7 +44,9 @@ services:
         source: ./account.db
         target: /app/account.db
     logging:
-      driver: none
+            driver: "json-file"
+            options:
+                max-size: "10m"
 
   db:
     command: mkdir db
@@ -69,6 +72,7 @@ services:
 
 networks:
   unetwork:
+    driver: bridge
 
 volumes:
   redirects:
