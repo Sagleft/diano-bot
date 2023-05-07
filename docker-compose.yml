@@ -29,6 +29,7 @@ services:
 
   utopia-api:
     image: uto9234/utopia-api
+    hostname: utopia-api
     ports:
       - 22825:22825
     environment:
@@ -39,8 +40,8 @@ services:
       - type: bind
         source: ./account.db
         target: /app/account.db
-    #logging:
-    #  driver: none
+    logging:
+      driver: none
 
   db:
     command: mkdir db
