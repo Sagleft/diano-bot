@@ -14,7 +14,7 @@ Supported Clients:
 
 ## How to run
 
-1. Install Utopia Messenger, create account file.
+1. Install [Utopia Messenger](https://u.is/en/download.html), create account file.
 
 2. Copy the repository or download it as a zip file:
 
