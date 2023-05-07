@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       bot_nickname: UnboundMedia
-      utopia_host: utopia-api
+      utopia_host: diano-bot_utopia-api_1
       utopia_token: FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       utopia_port: 22825
       db_host: db
