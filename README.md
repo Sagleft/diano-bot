@@ -46,6 +46,12 @@ then run the command in the terminal to run bot:
 docker-compose up
 ```
 
+or run in background:
+
+```bash
+docker-compose up -d
+```
+
 ## create content redirects
 
 To create a new redirect contents task create a .json file in the `redirects` folder.
