@@ -1,7 +1,11 @@
-/composer.lock
-/vendor/**
+composer.lock
+/bot/vendor/**
 /logs/**
-/cache/**
+/bot/cache/**
+/redirects/**
 .env
 .htaccess
 *.bak
+db/**
+bot/helper/cron
+account.db
