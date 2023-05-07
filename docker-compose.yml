@@ -3,6 +3,7 @@ version: "2.2"
 services:
   core:
     build: bot/
+    restart: always
     environment:
       bot_nickname: UnboundMedia
       utopia_host: utopia-api
@@ -30,6 +31,7 @@ services:
   utopia-api:
     image: uto9234/utopia-api
     hostname: utopia-api
+    restart: always
     ports:
       - 22825:22825
     environment:

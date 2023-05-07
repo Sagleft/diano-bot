@@ -14,7 +14,7 @@ Supported Clients:
 
 ## How to run
 
-1. Install Utopia Messenger, create account file.
+1. Install [Utopia Messenger](https://u.is/en/download.html), create account file.
 
 2. Copy the repository or download it as a zip file:
 
@@ -44,6 +44,12 @@ then run the command in the terminal to run bot:
 
 ```bash
 docker-compose up
+```
+
+or run in background:
+
+```bash
+docker-compose up -d
 ```
 
 ## create content redirects
