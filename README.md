@@ -1,5 +1,5 @@
 
-![logo](https://github.com/Sagleft/diano-bot/raw/master/logo.png)
+![logo](logo.jpg)
 
 This bot allows you to periodically copy content from one messenger to another.
 
@@ -10,74 +10,45 @@ Supported Clients:
 
 ## Requirements
 
-* PHP 7.1+
-* php-composer
-* cron
-* mariadb 5.5+
+* Docker 2.2+
 
-## Installation
+## How to run
 
-Extended instruction [available here](https://gist.github.com/Sagleft/1ec700b47e6e8b59d1599385d7139829) (while in Russian, later there will be a translation in English).
+1. Install Utopia Messenger, create account file.
 
-Using Centos 7 as an example. First, let's install everything you need:
+2. Copy the repository or download it as a zip file:
 
 ```bash
-sudo yum install -y unzip nano git composer
+git clone https://github.com/Sagleft/diano-bot && cd diano-bot
 ```
 
-Next, you need to install PHP version 7.1 or higher, as well as MariaDB, [you can use this instruction](https://github.com/Sagleft/install-lamp/blob/master/centos7_lamp.sh).
+3. Put Utopia account file in the bot repository directory. Name a file `account.db`
 
-Next, we clone the repository and install the necessary packages:
+4. Make changes to the config file `docker-compose.yml`
+
+* `CRON_SPEC` - determines how often to post in the channels. Example: `every 1m`, `every 1h`
+
+or a cron setting of the kind: `<Minute> <Hour> <Day_of_the_Month> <Month_of_the_Year> <Day_of_the_Week>`
+
+example:
+
+`0 2 * * *` - schedule a cron to execute at 2 am daily.
+
+5. Install docker-compose if it is not already on the system.
+
+Examples:
+
+* [How To Install and Use Docker Compose on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
+
+then run the command in the terminal to run bot:
 
 ```bash
-cd ~
-git clone https://github.com/Sagleft/diano-bot
-cd diano-bot
-mkdir cache
-cp example.env .env
-composer update
+docker-compose up
 ```
 
+## create content redirects
 
-
-Next, we will deal with the database. First, you need to create a user to grant privileges to:
-
-```bash
-mysql -u root
-```
-
-then in mysql:
-
-```
-CREATE USER 'dianouser'@'localhost' IDENTIFIED BY '';
-GRANT ALL PRIVILEGES ON * . * TO 'dianouser'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-Create a database:
-
-```
-CREATE DATABASE `diano` CHARACTER SET utf8 COLLATE utf8_general_ci;
-```
-
-and import tables dump:
-
-```
-cd ~/diano-bot
-mysql -u dianouser -b diano<diano.sql
-```
-
-Next, you need to create tasks for importing channels. An example of such files is shown below. The files should be located in the `cache` directory.
-
-## Usage
-
-This command processes all requests for content transportation:
-
-```bash
-php cron/execute_orders.php
-```
-
-To create a new ticket create a .json file in the `cache` folder.
+To create a new redirect contents task create a .json file in the `redirects` folder.
 
 For example, 'export_NationGeographic.json'.
 
@@ -133,15 +104,8 @@ example:
 wget http://curl.haxx.se/ca/cacert.pem -O /etc/pki/tls/cert.pem --no-check-certificate
 ```
 
-## other
-
-This content transport request will be made the next time the script `cron/execute_orders.php` is called.
-
-You will also need to enter data for authorization in the file `.env`
-
-
 ---
 
 ![image](https://github.com/Sagleft/Sagleft/raw/master/image.png)
 
-### :globe_with_meridians: [Telegram канал](https://t.me/+VIvd8j6xvm9iMzhi)
+### :globe_with_meridians: [Telegram channel](https://t.me/+VIvd8j6xvm9iMzhi)
