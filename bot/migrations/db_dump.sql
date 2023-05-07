@@ -1,7 +1,3 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
 CREATE TABLE `channels` (
   `id` int(11) NOT NULL,
   `messenger` set('default','utopia','telegram') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default',

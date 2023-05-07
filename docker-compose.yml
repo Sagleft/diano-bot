@@ -16,7 +16,7 @@ services:
       db_enabled: 1
       max_file_size_mb: 10
       is_debug: 1
-      CRON_SPEC: every 1m
+      CRON_SPEC: every 10m
       DISABLE_ENV_PARSE: 1
     depends_on:
       - utopia-api
@@ -31,7 +31,6 @@ services:
   utopia-api:
     image: uto9234/utopia-api
     hostname: diano-utopia-api
-    container_name: diano-utopia-api
     restart: always
     ports:
       - 22825:22825
@@ -44,9 +43,10 @@ services:
         source: ./account.db
         target: /app/account.db
     logging:
-            driver: "json-file"
-            options:
-                max-size: "10m"
+      driver: "local"
+      options:
+        max-size: "5m"
+        max-file: "5"
 
   db:
     command: mkdir db
@@ -62,13 +62,13 @@ services:
     ports:
       - 3318:3306
     volumes:
-      - ./db:/var/lib/mysql
-      - ./bot/db_dump.sql:/docker-entrypoint-initdb.d/init.sql
+      #- ./db:/var/lib/mysql
+      - ./bot/migrations:/docker-entrypoint-initdb.d
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       - unetwork
     logging:
-      driver: none
+      driver: "local"
 
 networks:
   unetwork:
